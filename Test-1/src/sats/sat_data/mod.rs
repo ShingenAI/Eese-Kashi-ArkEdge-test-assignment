@@ -19,10 +19,25 @@ impl SatData {
         }       
     }
 
+    pub fn register_param(&mut self, param_name: &str, value: f64) {
+        match param_name {
+            "TEMP" => self.register_temp(value),
+            "VOLT" => self.register_volt(value),
+            _ => {
+                // TODO: Handle new params
+                eprintln!("Unknown param: {}", param_name);
+            }
+        }
+    }
+
     pub fn registerTemp(&mut self, temp:f64){
         self.latest_temp = temp;
         self.temp_count += 1;
         self.temp_sum += temp;
+    }
+
+    pub fn register_volt(&mut self, volt:f64){
+        self.volt = temp;
     }
 
     pub fun get_temp_average(&self) -> f64 {
