@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use crate::tests::shared::telemetry::SatData;
 
-pub fn run_telemetry_parser() {
+pub fn run() {
     let logs = vec![
         "2025-09-17T11:30Z SAT-3 TEMP=23.5",
         "2025-09-17T11:31Z SAT-3 VOLT=3.7",
