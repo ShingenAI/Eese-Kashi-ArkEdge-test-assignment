@@ -93,7 +93,6 @@ mod tests {
     #[test]
     fn deplete_in_first_sun() { // a<b, depletes within sun
         // a=10, b=40, c=20 => 20 Wh / (30 W) = 0.666.. h => 40 min
-        // a=10, b=40, c=20 => 20 Wh / (30 W) = 0.666.. h => 40 min
         assert_eq!(minutes_until_depletion(10, 40, 20), 40);
     }
 

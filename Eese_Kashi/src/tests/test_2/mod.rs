@@ -52,7 +52,7 @@ pub fn packet_parser(path: &str) -> io::Result<()> {
         }
         println!();
 
-        // ⏭ Move to the next potential packet
+        // Move to the next potential packet
         i += total_packet_size;
     }
     println!("\n::::::: Packet parser ended :::::::\n");
