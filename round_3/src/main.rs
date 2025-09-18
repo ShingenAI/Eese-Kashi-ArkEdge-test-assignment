@@ -1,10 +1,14 @@
 mod tests;
-use tests::test_1::method_1;
-use tests::test_2::method_2;
-use tests::test_3::method_3;
+use tests::test_1::minutes_until_depletion;
+use tests::test_2::packet_parser;
 
 fn main() {
-    method_1();
-    method_2();
-    method_3();
+    // Problem 1
+    let (a, b, c) = (40_i64, 30_i64, 20_i64);  //  sample input from Problem 1
+    let result = minutes_until_depletion(a, b, c);
+    println!("{}", result);  // Result
+    
+    // Problem 2
+    let _ = packet_parser("samples/sample1.dat");
+    let _ = packet_parser("samples/sample2.dat");
 }
