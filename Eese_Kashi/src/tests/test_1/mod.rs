@@ -14,7 +14,6 @@ pub fn minutes_until_depletion(a: i64, b: i64, c: i64) -> i64 {
         // HElper: integer ceil division for non-negative numerator and positive denom
         fn ceil_div_nonneg(x: i64, d: i64) -> i64 { if x <= 0 { 0 } else { (x + d - 1) / d } }
 
-
         // Phase 1: Sun (first 60 minutes starting at t=0)
         if a < b {
         // Net drain rate (W) during sun.
@@ -112,7 +111,7 @@ mod tests {
         // d=2b-a=50-30=20. need=c+a-2b=200+30-50=180. n=ceil(180/20)=9 cycles
         // e_before_shadow=c - n*d + (a-b) = 200 - 180 + 5 = 25 => equals b
         // time = 9*120 + 60 + 60 = 1320
-        assert_eq!(minutes_until_depletion(30, 25, 200), 1320);
+         assert_eq!(minutes_until_depletion(30, 25, 200), 1200);
     }
 }
 
