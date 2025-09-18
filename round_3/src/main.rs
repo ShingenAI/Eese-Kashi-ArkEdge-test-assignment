@@ -1,20 +1,18 @@
 mod tests;
-use tests::test_1::minutes_until_depletion;
+use tests::test_1::get_minutes_until_depletion;
 use tests::test_2::{packet_parser};
 
 fn main() {
     // Problem 1
-    println!("Problem 1");
-    let (a, b, c) = (40_i64, 30_i64, 20_i64);  //  sample input from Problem 1
-    let result = minutes_until_depletion(a, b, c);
-    println!("{}", result);  // Result
+    println!("\n\nProblem 1\n");
+    let result1 = get_minutes_until_depletion("samples/sample1.txt").unwrap();
+    println!("Output: (sample1.txt) {}", result1);
+
+    let result2 = get_minutes_until_depletion("samples/sample2.txt").unwrap();
+    println!("Output: (sample2.txt): {}", result2);
 
     // Problem 2
-     println!("Problem 2");
+     println!("\n\nProblem 2");
     let _ = packet_parser("samples/sample1.dat");
     let _ = packet_parser("samples/sample2.dat");
-    /*
-    let _ = debug_hex_dump("samples/sample1.dat");
-    let _ = debug_hex_dump("samples/sample2.dat");
-    */
 }

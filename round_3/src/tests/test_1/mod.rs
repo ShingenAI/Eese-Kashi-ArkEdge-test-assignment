@@ -1,7 +1,12 @@
-/// Return minutes until battery first reaches 0, or -1 if it never depletes.
-/// a: solar generation in W during sun (first 60 min of each 120-min cycle)
-/// b: constant consumption in W
-/// c: initial energy in Wh
+use std::fs::File;
+use std::io::{self, BufRead};
+
+/*
+    Return minutes until battery first reaches 0, or -1 if it never depletes.
+    a: solar generation in W during sun (first 60 min of each 120-min cycle)
+    b: constant consumption in W
+    c: initial energy in Wh
+*/
 pub fn minutes_until_depletion(a: i64, b: i64, c: i64) -> i64 {
     // No consumption - never depletes
     if b == 0 { return -1; }
@@ -109,4 +114,31 @@ mod tests {
         // time = 9*120 + 60 + 60 = 1320
         assert_eq!(minutes_until_depletion(30, 25, 200), 1320);
     }
+}
+
+
+pub fn get_minutes_until_depletion(path: &str) -> io::Result<i64> {
+    let file = File::open(path)?;
+    let reader = io::BufReader::new(file);
+
+    for line in reader.lines() {
+        let line = line?;
+        if line.trim().is_empty() {
+            continue; // skip empty lines
+        }
+
+        let values: Vec<i64> = line
+            .trim()
+            .split_whitespace()
+            .map(|s| s.parse().unwrap_or(0))
+            .collect();
+
+        if values.len() == 3 {
+            return Ok(minutes_until_depletion(values[0], values[1], values[2]));
+        } else {
+            return Err(io::Error::new(io::ErrorKind::InvalidData, "Expected 3 values"));
+        }
+    }
+
+    Err(io::Error::new(io::ErrorKind::UnexpectedEof, "No valid lines found"))
 }

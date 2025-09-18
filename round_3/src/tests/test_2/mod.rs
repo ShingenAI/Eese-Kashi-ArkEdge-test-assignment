@@ -58,22 +58,3 @@ pub fn packet_parser(path: &str) -> io::Result<()> {
     println!("\n::::::: Packet parser ended :::::::\n");
     Ok(())
 }
-
-pub fn debug_hex_dump(path: &str) -> io::Result<()> {
-    println!("1. debug_hex_dump");
-    let mut file = File::open(path)?;
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)?;
-    println!("2. debug_hex_dump");
-    println!("Hex dump of {} ({} bytes):", path, buffer.len());
-    println!("3. debug_hex_dump");
-    for (i, byte) in buffer.iter().enumerate() {
-        print!("{:02x} ", byte);
-        if (i + 1) % 16 == 0 {
-            println!();
-        }
-    }
-    println!("\n— End of dump —\n");
-    println!("\n— YES WE ARE OK!!");
-    Ok(())
-}
