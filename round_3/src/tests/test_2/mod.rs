@@ -1,0 +1,1 @@
+pub fn method_2(){}
