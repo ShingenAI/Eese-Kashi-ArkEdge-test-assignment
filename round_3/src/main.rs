@@ -1,6 +1,6 @@
 mod tests;
 use tests::test_1::minutes_until_depletion;
-use tests::test_2::packet_parser;
+use tests::test_2::{packet_parser};
 
 fn main() {
     // Problem 1
@@ -13,4 +13,8 @@ fn main() {
      println!("Problem 2");
     let _ = packet_parser("samples/sample1.dat");
     let _ = packet_parser("samples/sample2.dat");
+    /*
+    let _ = debug_hex_dump("samples/sample1.dat");
+    let _ = debug_hex_dump("samples/sample2.dat");
+    */
 }
