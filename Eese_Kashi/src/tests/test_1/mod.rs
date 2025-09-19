@@ -16,13 +16,13 @@ pub fn minutes_until_depletion(a: i64, b: i64, c: i64) -> i64 {
 
         // Phase 1: Sun (first 60 minutes starting at t=0)
         if a < b {
-        // Net drain rate (W) during sun.
-        let drain = b - a; // > 0
-        // Minutes to hit zero within sun (floor, truncation)
-        let t_sun = (60 * c) / drain; // floor(c / (drain/60))
-        if t_sun < 60 { return t_sun; }
-        // else continue after full sun
-    }
+            // Net drain rate (W) during sun.
+            let drain = b - a; // > 0
+            // Minutes to hit zero within sun (floor, truncation)
+            let t_sun = (60 * c) / drain; // floor(c / (drain/60))
+            if t_sun < 60 { return t_sun; }
+            // else continue after full sun
+        }
 
 
     // ENergy after the first sun hour.
