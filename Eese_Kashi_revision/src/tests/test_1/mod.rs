@@ -1,6 +1,20 @@
 use std::fs::File;
 use std::io::{self, BufRead};
 
+/// Returns the minutes until depletation for a given phase minutes duration
+fn get_phase_minutes_until_depletion(energy_reserve: i64, sun_gain: i64, consumption_per_hour: i64, phase_minutes:i64) -> i64{
+    let net_drain_per_hour = consumption_per_hour - sun_gain;
+    let minutes_until_depletion = (phase_minutes * energy_reserve) / net_drain_per_hour;
+    return minutes_until_depletion;
+}
+
+/// Returns true if the battery can survive the full phase_minutes.
+fn get_survives_phase(energy_reserve: i64, sun_gain: i64, consumption_per_hour: i64, phase_minutes:i64) -> bool {
+    let minutes_until_depletion = get_phase_minutes_until_depletion(energy_reserve: i64, sun_gain: i64, consumption_per_hour: i64, phase_minutes:i64)
+    return minutes_until_depletion >= phase_minutes;
+}
+
+
 /*
     Return minutes until battery first reaches 0, or -1 if it never depletes.
     a: sun_gain
@@ -82,12 +96,18 @@ pub fn minutes_until_depletion(
     // Let d = -(energy_reserve_per_cycle) = 2b - a (> 0)
     let energy_loss_per_cycle = -energy_reserve_per_cycle; // > 0
 
-    
-    // After n full cycles (n >= 1), energy is: E_n = c - n*d
-    // Before shadow of cycle n (0-indexed cycles), energy is: E_n + (a - b)
-    // We need smallest n >= 0 such that: E_n + (a - b) <= b
-    // c - n*d + (a - b) <= b => c + a - 2b <= n*d
-    // n >= ceil( (c + a - 2b) / d ), clamp to >= 0
+    /*
+        After full_cycles (full_cycles >= 1), 
+        full_cycles_energy_reserve = energy_reserve - ( full_cycles * energy_loss_per_cycle )
+
+        Then—before entering the shadow of the next cycle:
+        We still get the 60 minutes of sunlight. So the battery gets one last sunlight boost:
+        let energy_before_final_shadow = full_cycles_energy_reserve + (sun_gain - consumption_per_hour);
+        
+        We need smallest n >= 0 such that: E_n + (a - b) <= b
+        c - n*d + (a - b) <= b => c + a - 2b <= n*d
+        n >= ceil( (c + a - 2b) / d ), clamp to >= 0
+    */
     let need = c + a - 2 * b; // could be <= 0 (then n = 0)
     let n = ceil_div_nonneg(need, d); // number of full cycles before final shadow
 
