@@ -40,7 +40,7 @@ pub fn minutes_until_depletion(
     }
 
     // Helper: integer ceil division for non-negative numerator and positive denom
-    fn ceil_div_nonneg(x: i64, d: i64) -> i64 { if x <= 0 { 0 } else { (x + d - 1) / d } }
+    fn ceil_div_nonneg(need: i64, d: i64) -> i64 { if need <= 0 { 0 } else { (need + d - 1) / d } }
 
 
     // Phase 1: Sun (first 60 minutes starting at t=0)
@@ -85,12 +85,11 @@ pub fn minutes_until_depletion(
 
     // Phase 3: Multi-cycle analysis
     // Net change per full 120-min cycle: a - 2b (Wh)
-    let consumption_per_cycle.   = consumption_per_hour * 2
+    let consumption_per_cycle    = consumption_per_hour * 2
     let energy_reserve_per_cycle = sun_gain - consumption_per_cycle; // could be negative, zero, or positive
 
     // If cycles are non-decreasing or flat, and we survived first shadow => never depletes
     if energy_reserve_per_cycle >= 0 { return ETERNAL; }
-
     
     // We will eventually deplete in some later shadow.
     // Let d = -(energy_reserve_per_cycle) = 2b - a (> 0)
@@ -110,6 +109,16 @@ pub fn minutes_until_depletion(
     */
     let need = c + a - 2 * b; // could be <= 0 (then n = 0)
     let n = ceil_div_nonneg(need, d); // number of full cycles before final shadow
+
+    let energy_after_sun = energy_reserve + (sun_gain - consumption_per_hour);
+
+    if energy_after_sun <= 0 {
+        // Death in the sunlight
+        return (energy_reserve + sun_gain) * 60 / consumption_per_hour;
+    }
+
+    // Death in the shadow
+    return 60 + energy_after_sun * 60 / consumption_per_hour;
 
 
     let e_before_shadow = c - n * d + (a - b); // energy entering the final shadow
